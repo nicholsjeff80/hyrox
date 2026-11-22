@@ -9,8 +9,8 @@
     <link rel="icon" href="./icon.png">
     <link rel="apple-touch-icon" href="./icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="stylesheet" href="./styles.css">
-    <script defer src="./app.js"></script>
+    <link rel="stylesheet" href="./styles.css?v=2">
+    <script type="module" src="./app.js?v=2"></script>
   </head>
   <body>
     <main>
@@ -18,6 +18,7 @@
         <div class="setup-panel">
           <header class="setup-header">
             <span class="wordmark"><span class="track-mark" aria-hidden="true"></span>Lord of the Hyrox</span>
+            <span class="step-count">1 of 4</span>
           </header>
           <form id="setup-form" class="setup-form">
             <h1 id="setup-title" tabindex="-1">Who’s running?</h1>
@@ -27,7 +28,7 @@
                 <select id="participant-count"></select>
               </div>
               <div class="field-group">
-                <label for="lap-count">Laps per runner</label>
+                <label for="lap-count">Laps per 1 km</label>
                 <div class="stepper">
                   <button type="button" id="fewer-laps" aria-label="Subtract one lap">−</button>
                   <input id="lap-count" type="number" inputmode="numeric" min="1" max="999" step="1" value="12" required>
@@ -42,11 +43,86 @@
             <div class="setup-actions">
               <button type="button" id="back-to-board" class="secondary-action" hidden>Back to board</button>
               <button type="button" id="restart-app" class="secondary-action" hidden>Restart app</button>
-              <button type="submit" class="primary-action"><span id="open-board-label">Open lap board</span><span aria-hidden="true">→</span></button>
+              <button type="submit" class="primary-action"><span id="setup-next-label">Choose events</span><span aria-hidden="true">→</span></button>
             </div>
           </form>
         </div>
         <noscript><p class="no-script">Enable JavaScript to use the lap board.</p></noscript>
+      </section>
+
+      <section id="events-screen" class="setup-screen" aria-labelledby="events-title" hidden>
+        <div class="setup-panel">
+          <header class="setup-header">
+            <span class="wordmark"><span class="track-mark" aria-hidden="true"></span>Lord of the Hyrox</span>
+            <span class="step-count">2 of 4</span>
+          </header>
+          <div class="setup-form">
+            <div class="screen-heading">
+              <h1 id="events-title" tabindex="-1">Choose your events</h1>
+              <p>1 km run before each selected station</p>
+            </div>
+            <div class="review-group">
+              <span id="quick-picks-label" class="field-label">Quick picks</span>
+              <div id="event-presets" class="event-presets" role="group" aria-labelledby="quick-picks-label"></div>
+            </div>
+            <fieldset class="event-fieldset">
+              <legend class="visually-hidden">Events</legend>
+              <ol id="event-options" class="event-options"></ol>
+            </fieldset>
+            <div class="setup-actions">
+              <button type="button" id="back-to-roster" class="secondary-action">Back</button>
+              <button type="button" id="review-events" class="primary-action" disabled><span id="review-events-label">Review events</span><span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="review-screen" class="setup-screen" aria-labelledby="review-title" hidden>
+        <div class="setup-panel">
+          <header class="setup-header">
+            <span class="wordmark"><span class="track-mark" aria-hidden="true"></span>Lord of the Hyrox</span>
+            <span class="step-count">3 of 4</span>
+          </header>
+          <div class="setup-form">
+            <h1 id="review-title" tabindex="-1">Review your session</h1>
+            <div class="review-group">
+              <div class="review-heading"><h2>Roster</h2><button type="button" id="edit-roster" class="edit-action" aria-label="Edit roster">Edit</button></div>
+              <ul id="review-roster" class="review-roster" aria-label="Selected roster"></ul>
+            </div>
+            <div class="review-group">
+              <div class="review-heading"><h2>Event order</h2><button type="button" id="edit-events" class="edit-action" aria-label="Edit events">Edit</button></div>
+              <ol id="review-order" class="review-order"></ol>
+            </div>
+            <div class="session-summary"><strong id="review-distance"></strong><span id="review-laps"></span></div>
+            <div class="setup-actions">
+              <button type="button" id="back-to-events" class="secondary-action">Back</button>
+              <button type="button" id="continue-to-start" class="primary-action">Continue to start <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="start-screen" class="setup-screen" aria-labelledby="start-title" hidden>
+        <div class="setup-panel">
+          <header class="setup-header">
+            <span class="wordmark"><span class="track-mark" aria-hidden="true"></span>Lord of the Hyrox</span>
+            <span class="step-count">4 of 4</span>
+          </header>
+          <div class="setup-form">
+            <h1 id="start-title" tabindex="-1">Ready to start?</h1>
+            <div class="first-event">
+              <span id="first-event-number" class="field-label"></span>
+              <strong>1 km Run</strong>
+              <span id="first-event-laps" class="first-event-laps"></span>
+              <span id="first-event-station" class="first-station"></span>
+            </div>
+            <p class="start-instructions">Tap your color on the lap board to start your stopwatch.</p>
+            <div class="setup-actions">
+              <button type="button" id="back-to-review" class="secondary-action">Back</button>
+              <button type="button" id="start-session" class="primary-action"><span id="start-session-label">Start session</span><span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="board-screen" class="board-screen" aria-labelledby="board-title" hidden>
@@ -57,8 +133,32 @@
             <button type="button" id="edit-setup" class="secondary-action">Setup</button>
           </div>
         </header>
-        <div id="runner-board" class="runner-board" aria-label="Runner stopwatches"></div>
+        <div id="runner-board" class="runner-board" aria-label="Runner tiles"></div>
         <div id="announcement" class="visually-hidden" role="status"></div>
+      </section>
+
+      <section id="results-screen" class="results-screen" aria-labelledby="results-title" hidden>
+        <div class="results-panel">
+          <header class="setup-header">
+            <span class="wordmark"><span class="track-mark" aria-hidden="true"></span>Lord of the Hyrox</span>
+            <button type="button" id="results-back" class="secondary-action">Back to board</button>
+          </header>
+          <div class="results-body">
+            <div id="workout-total" class="workout-total">
+              <h1 id="results-title" tabindex="-1"></h1>
+              <span>Workout time</span>
+              <strong id="results-time"></strong>
+              <span id="results-event-count"></span>
+            </div>
+            <div class="split-results">
+              <h2 id="split-heading">Event splits</h2>
+              <table aria-labelledby="split-heading">
+                <thead><tr><th scope="col">Event</th><th scope="col">Run</th><th scope="col">Station</th><th scope="col">Total</th></tr></thead>
+                <tbody id="split-rows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
 
@@ -80,10 +180,14 @@
 
     <template id="runner-tile-template">
       <button type="button" class="runner-tile">
-        <span class="tile-head"><span class="tile-name"></span><span class="tile-time"></span></span>
+        <span class="tile-head"><span class="tile-name"></span><span class="tile-phase"></span></span>
         <span class="tile-readout"><strong class="tile-count"></strong><span class="tile-state"></span></span>
+        <span class="tile-clocks">
+          <span class="tile-workout"><span class="clock-label">Workout</span><span class="workout-clock"></span></span>
+          <span class="tile-event"><span class="clock-label event-clock-label">Event</span><span class="event-clock"></span></span>
+        </span>
         <span class="tile-progress" aria-hidden="true"></span>
-        <span class="restart-hint" hidden>Tap to restart</span>
+        <span class="tile-footer"><span class="tile-cue"></span><strong class="tile-instruction"></strong><span class="tile-arrow" aria-hidden="true" hidden>→</span></span>
       </button>
     </template>
   </body>
