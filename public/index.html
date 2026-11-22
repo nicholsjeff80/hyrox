@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f7f6f1" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#171a20" media="(prefers-color-scheme: dark)">
+    <title>Lord of the Hyrox</title>
+    <link rel="icon" href="./icon.png">
+    <link rel="apple-touch-icon" href="./icon.png">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="stylesheet" href="./styles.css">
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <main>
+      <section id="setup-screen" class="setup-screen" aria-labelledby="setup-title">
+        <div class="setup-panel">
+          <header class="setup-header">
+            <span class="wordmark"><span class="track-mark" aria-hidden="true"></span>Lord of the Hyrox</span>
+          </header>
+          <form id="setup-form" class="setup-form">
+            <h1 id="setup-title" tabindex="-1">Who’s running?</h1>
+            <div class="setup-values">
+              <div class="field-group">
+                <label for="participant-count">Participants</label>
+                <select id="participant-count"></select>
+              </div>
+              <div class="field-group">
+                <label for="lap-count">Laps per runner</label>
+                <div class="stepper">
+                  <button type="button" id="fewer-laps" aria-label="Subtract one lap">−</button>
+                  <input id="lap-count" type="number" inputmode="numeric" min="1" max="999" step="1" value="12" required>
+                  <button type="button" id="more-laps" aria-label="Add one lap">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="runner-fields">
+              <div class="field-labels" aria-hidden="true"><span>Names</span><span>Color</span></div>
+              <ul id="roster" class="roster" aria-label="Participants"></ul>
+            </div>
+            <div class="setup-actions">
+              <button type="button" id="back-to-board" class="secondary-action" hidden>Back to board</button>
+              <button type="button" id="restart-app" class="secondary-action" hidden>Restart app</button>
+              <button type="submit" class="primary-action"><span id="open-board-label">Open lap board</span><span aria-hidden="true">→</span></button>
+            </div>
+          </form>
+        </div>
+        <noscript><p class="no-script">Enable JavaScript to use the lap board.</p></noscript>
+      </section>
+
+      <section id="board-screen" class="board-screen" aria-labelledby="board-title" hidden>
+        <header class="board-header">
+          <h1 id="board-title" class="wordmark" tabindex="-1"><span class="track-mark" aria-hidden="true"></span>Lord of the Hyrox</h1>
+          <div class="board-tools">
+            <span id="board-laps" class="board-laps"></span>
+            <button type="button" id="edit-setup" class="secondary-action">Setup</button>
+          </div>
+        </header>
+        <div id="runner-board" class="runner-board" aria-label="Runner stopwatches"></div>
+        <div id="announcement" class="visually-hidden" role="status"></div>
+      </section>
+    </main>
+
+    <template id="runner-field-template">
+      <li>
+        <div class="runner-field">
+          <input class="runner-name" type="text" maxlength="48" autocomplete="off" required>
+          <button type="button" class="color-picker-button" aria-expanded="false">
+            <span class="swatch" aria-hidden="true"></span>
+            <span class="caret" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="color-picker" role="group" hidden>
+          <span class="picker-label"></span>
+          <div class="color-options"></div>
+        </div>
+      </li>
+    </template>
+
+    <template id="runner-tile-template">
+      <button type="button" class="runner-tile">
+        <span class="tile-head"><span class="tile-name"></span><span class="tile-time"></span></span>
+        <span class="tile-readout"><strong class="tile-count"></strong><span class="tile-state"></span></span>
+        <span class="tile-progress" aria-hidden="true"></span>
+        <span class="restart-hint" hidden>Tap to restart</span>
+      </button>
+    </template>
+  </body>
+</html>
